@@ -1,11 +1,37 @@
 import axios from "axios";
-const executeCode=async (sourceCode, languageId, stdin)=>
-{
-const response=await axios.post();
-const token=response.data.token
-const result=await axios.get()
+const submitBatch=async (submissions)=>
+{  try{
+  const response=await axios.post(`${process.env.JUDGE0_URL}/submissions/batch`,{
+    
+     submissions,
+    
+  });
 
-return result;
+
+return response.data;}
+catch(error)
+{
+  throw error;
+}
 } 
 
-export default executeCode;
+const getBatchResult = async (tokens) => {
+  try {
+   
+    const response = await axios.get(
+      `${process.env.JUDGE0_URL}/submissions/batch`,
+      {
+        params: {
+          tokens: tokens.join(","),
+          fields: "token,status,time,memory,stdout,stderr,compile_output",
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export {submitBatch,getBatchResult};

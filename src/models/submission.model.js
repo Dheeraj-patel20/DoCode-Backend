@@ -19,41 +19,43 @@ const SubmissionSchema = new Schema(
     language: {
       type: String,
       required: true,
-      enum: ["JavaScript", "Python", "Java", "C++"],
+      enum: ["JavaScript", "Python", "Java", "C++","cpp"],
     },
 
     verdict: {
       type: String,
-      required: true,
-      default: "Pending",
-      enum: [
-        "Pending",
-        "Accepted",
-        "Wrong Answer",
-        "Compilation Error",
-        "Runtime Error",
-        "Time Limit Exceeded",
-        "Memory Limit Exceeded",
-      ],
+      default:null,
+     
     },
     runtime: {
       type: Number,
-      required: true,
+    
     },
     memory: {
       type: Number,
 
-      required: true,
+      
     },
     passedTestCases: {
       type: Number,
       required: true,
-      passedTestCases: 0,
+      default: 0,
     },
     totalTestCases: {
       type: Number,
       required: true,
     },
+    status:{
+       type:String,
+       default: "Pending",
+       enum: ["Pending", "Running", "Completed", "Failed"],
+       required:true,
+    },
+    judge0Tokens: [
+  {
+    type: String,
+  },
+]
   },
   {
     timestamps: true,

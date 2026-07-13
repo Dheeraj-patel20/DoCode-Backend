@@ -6,20 +6,21 @@ const SubmissionValidator=()=>{
             .trim()
             .notEmpty()
             .withMessage("Problem does'nt exists")
-            .ObjectId.isValid()
+            .isMongoId()
             .withMessage("Object id is not valid"),
 
             body("language")
             .trim()
             .notEmpty()
-            .withMessage("Language is not selected"),
+            .withMessage("Language is not selected")
+            .isIn(["JavaScript","Python","Java","C++","cpp"])
+            .withMessage("Invalid language select from the above"),
 
             body("sourceCode")
             .trim()
             .notEmpty()
             .withMessage("Source code is empty")
-            .oneOf(["JavaScript","Python","Java","C++",])
-            .withMessage("Invalid language select from the above")
+           
 
 
                              

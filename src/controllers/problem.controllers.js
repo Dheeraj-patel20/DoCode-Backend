@@ -189,4 +189,34 @@ const deleteProblem=asyncHandler(async(req,res)=>{
     return res.status(200).json(new ApiResponse(200,[],"Problem Deleted Successfully"));
 })
 
-export {createProblem,getProblem,getProblemBySlug,updateProblem,deleteProblem};
+const deleteManyProblem=asyncHandler(async(req,res)=>{
+    const { problemIds } = req.body;
+    console.log(problemIds);
+     if(!problemIds)
+    {
+        throw new ApiError(400,"Problem id is not defined");
+    }
+     if (!Array.isArray(problemIds)) {
+    throw new ApiError(400, "Problem IDs must be an array");}
+
+    if(problemIds.length==0)
+    {
+        throw new ApiError(400,"Problem IDs array cannot be empty.");
+    }
+   
+
+    
+    const result=await Problem.deleteMany({
+        _id:{
+            $in:problemIds
+        }
+
+        
+    });
+
+    console.log(result);
+
+return res.status(200).json( new ApiResponse(200,result,"Problems deleted successfully"));
+})
+
+export {createProblem,getProblem,getProblemBySlug,updateProblem,deleteProblem,deleteManyProblem};

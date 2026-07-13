@@ -8,9 +8,7 @@ const ProblemValidator = () => {
     .notEmpty()
     .withMessage("Title is required"),
 
-  
-
-    body("slug")
+      body("slug")
       .trim()
       .toLowerCase()
       .notEmpty()
@@ -63,6 +61,11 @@ const ProblemValidator = () => {
     body("memoryLimit")
       .isNumeric()
       .withMessage("Memory limit must be a number"),
+
+    body("referenceSolution")
+      .optional()
+      .isArray()
+      .withMessage("should be in aaray")
   ];
 };
 

@@ -59,9 +59,6 @@ visibleTestCases: [
 tags: [
   String
 ],
- hints: [
-  String
-],
 companies: [
   String
 ],
@@ -81,6 +78,12 @@ companies: [
     type: Boolean,
     default:false,
   },
+  referenceSolution: [
+  {
+    language: String,
+    code: String
+  }
+]
  
 },
  { timestamps:true,
