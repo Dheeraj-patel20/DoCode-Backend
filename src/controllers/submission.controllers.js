@@ -25,7 +25,7 @@ return res.status(202).json(new ApiResponse(202,submission,"Solution submitted s
 
 });
 
-const getSubmission = asyncHandler(async (req, res) => {
+const getMySubmissions = asyncHandler(async (req, res) => {
   const { verdict, language } = req.query;
   const page = Number(req.query.page) || 1;
   const limit = Number(req.query.limit) || 10;
@@ -37,7 +37,7 @@ const getSubmission = asyncHandler(async (req, res) => {
     query.language = language;
   }
 
-  const submission = await Submission.find(query)
+  const submissions = await Submission.find(query)
     .populate("problem", "title slug difficulty")
     .skip((page - 1) * limit)
     .limit(limit)
@@ -58,7 +58,7 @@ const getSubmission = asyncHandler(async (req, res) => {
     .json(
       new ApiResponse(
         200,
-        { submission, pagination },
+        { submissions, pagination },
         "Submissions fetched successfully",
       ),
     );
@@ -94,14 +94,20 @@ const getSubmissionByProblemId = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   const page = Number(req.query.page) || 1;
   const limit = Number(req.query.limit) || 10;
+  const problem=await Submission.find({problemId});
+  if(!problem)
+  {
+    throw new ApiError(400,"Problem id is invalid");
+  }
 
   const query = { user: userId, problem: problemId };
 
-  const submission = await Submission.find(query, {
+  const submissions = await Submission.find(query, {
     problem: 1,
-    sourceCode: 1,
     language: 1,
     verdict: 1,
+    runtime:1,
+    memory:1,
   })
     .populate("problem", "title slug")
     .skip((page - 1) * limit)
@@ -124,7 +130,7 @@ const getSubmissionByProblemId = asyncHandler(async (req, res) => {
     .json(
       new ApiResponse(
         200,
-        { submission, pagination },
+        { submissions, pagination },
         "Submission returned successfully",
       ),
     );
@@ -174,11 +180,13 @@ await submission.save();
 
  return res.status(200).json(new ApiResponse(200,submission,"Submission result fetched successfully."));
 
-})
+});
+
+
 
 export {
   submitSolutionController,
-  getSubmission,
+  getMySubmissions,
   getSubmissionById,
   getSubmissionByProblemId,
   getSubmissionResult
