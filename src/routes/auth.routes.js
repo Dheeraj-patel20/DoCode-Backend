@@ -1,9 +1,10 @@
 import {Router} from 'express';
-import {forgotPasswordRequest, refreshAccessToken, registerUser, verificationEmail,resetForgotPassword} from '../controllers/auth.controllers.js';
+import {forgotPasswordRequest, refreshAccessToken, registerUser, verificationEmail,resetForgotPassword,updateAvatar} from '../controllers/auth.controllers.js';
 import { validate } from '../middlewares/Validator.middleware.js';
 import { userChangeCurrentPasswordValidator, userForgotPasswordValidator, userRegisterValidator,userloginValidator,userResetForgotPasswordValidator } from '../validators/index.js';
 import { loginUser,logoutUser,getUser,ResendEmailVerification,changeCurrentPassword} from '../controllers/auth.controllers.js';
 import { verifyJWT } from '../middlewares/auth.middleware.js';
+import { upload } from "../middlewares/multer.middleware.js";
 
 const router=Router();
 
@@ -14,6 +15,7 @@ router.route("/verify-email/:VerificationToken").get(verificationEmail);
 router.route("/refresh-token").post(refreshAccessToken);
 router.route("/forgot-password").post(userForgotPasswordValidator(),validate,forgotPasswordRequest);
 router.route("/reset-password/:resetToken").post(userResetForgotPasswordValidator(),validate,resetForgotPassword);
+router.route("/avatar").patch(verifyJWT,upload.single("avatar"),updateAvatar);
 
 
 //secured route
